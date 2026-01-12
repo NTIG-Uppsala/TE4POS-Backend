@@ -5,7 +5,7 @@ GET {{StockAPI_HostAddress}}/products
 Accept: application/json
 
 ### Get a product by their id
-GET {{StockAPI_HostAddress}}/products/18
+GET {{StockAPI_HostAddress}}/products/20
 Accept: application/json
 
 ### Example post request for a new product
@@ -13,10 +13,36 @@ POST {{StockAPI_HostAddress}}/products
 Content-Type: application/json
 Accept: application/json
 {
-  "name": "New Product",
-  "price": 75,
-  "stock": 50,
-  "category": 4
+  "name": "Wireless Mouse",
+  "category": 1,
+  "stock": 50
+}
+
+###
+POST {{StockAPI_HostAddress}}/products/1/stock/add
+Content-Type: application/json
+Accept: application/json
+{
+  "amount": 10
+}
+
+###
+POST {{StockAPI_HostAddress}}/products/1/stock/remove
+Content-Type: application/json
+Accept: application/json
+{
+  "amount": 10
+}
+
+###
+PUT {{StockAPI_HostAddress}}/products/10
+Content-Type: application/json
+Accept: application/json
+{
+  "name": "HOP HOP",
+  "price": 85,
+  "stock": 60,
+  "category": 5
 }
 
 ###

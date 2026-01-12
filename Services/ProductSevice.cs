@@ -19,8 +19,14 @@ public static class ProductService
         return DatabaseHelper.DeleteProductById(id);
     }
 
-    public static void Update(Product Product)
-    {
+    public static Product Update(int id, Product updatedProduct) => DatabaseHelper.UpdateProduct(id, updatedProduct);
 
+    public static object IncreaseStock(int id, int amount)
+    {
+        return DatabaseHelper.AddStock(id, amount);
+    }
+    public static object DecreaseStock(int id, int amount)
+    {
+        return DatabaseHelper.RemoveStock(id, amount);
     }
 }

@@ -31,11 +31,46 @@ namespace StockAPI.Controllers
             return product;
         }
         [HttpPost]
-        public ActionResult<Product> CreateProduct(Product product)
+        public ActionResult<Product> CreateProduct([FromBody] Product product)
         {
-            ProductService.Create(product);
-            return product;
+            return ProductService.Create(product);
 
+        }
+        [HttpPut("{id}")]
+        public ActionResult<Product> UpdateProduct(int id, Product updatedProduct)
+        {
+            var existingProduct = ProductService.GetProduct(id);
+            if (existingProduct == null)
+                return NotFound();
+            else
+            {
+                return ProductService.Update(id, updatedProduct);
+            }
+        }
+        [HttpPost("{id}/stock/add")]
+        public ActionResult<object> AddStock(int id, [FromBody] StockUpdate data)
+        {
+            int amount = data.Amount;
+            var existingProduct = ProductService.GetProduct(id);
+            if (existingProduct == null)
+                return NotFound();
+            else
+            {
+                return ProductService.IncreaseStock(id, amount);
+            }
+        }
+
+        [HttpPost("{id}/stock/remove")]
+        public ActionResult<object> RemoveStock(int id, [FromBody] StockUpdate data)
+        {
+            int amount = data.Amount;
+            var existingProduct = ProductService.GetProduct(id);
+            if (existingProduct == null)
+                return NotFound();
+            else
+            {
+                return ProductService.DecreaseStock(id, amount);
+            }
         }
 
         [HttpDelete("{id}")]
@@ -50,5 +85,9 @@ namespace StockAPI.Controllers
                 return NoContent();
             }
         }
+    }
+    public class StockUpdate
+    {
+        public int Amount { get; set; }
     }
 }

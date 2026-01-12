@@ -266,6 +266,95 @@ namespace StockAPI
             }
         }
 
+        public static Product AddStock(int id, int addedStock)
+        {
+            using var connection = new SQLiteConnection(GetConnectionString());
+            connection.Open();
+
+            using var tx = connection.BeginTransaction();
+
+            int currentStock;
+
+            using (var selectCmd = new SQLiteCommand(
+                "SELECT Stock FROM Products WHERE Id = @id",
+                connection, tx))
+            {
+                selectCmd.Parameters.AddWithValue("@id", id);
+
+                using var reader = selectCmd.ExecuteReader();
+
+                if (!reader.Read())
+                    return null;
+
+                currentStock = reader.GetInt32(reader.GetOrdinal("Stock"));
+            }
+
+            int newStock = currentStock + addedStock;
+
+            using (var updateCmd = new SQLiteCommand(
+                "UPDATE Products SET Stock = @stock, UpdatedAt = @updatedAt WHERE Id = @id",
+                connection, tx))
+            {
+                updateCmd.Parameters.AddWithValue("@stock", newStock);
+                updateCmd.Parameters.AddWithValue("@updatedAt", DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+                updateCmd.Parameters.AddWithValue("@id", id);
+                updateCmd.ExecuteNonQuery();
+            }
+
+            tx.Commit();
+
+            return new Product
+            {
+                id = id,
+                stock = newStock
+            };
+        }
+
+
+        public static object RemoveStock(int id, int removedStock)
+        {
+            using var connection = new SQLiteConnection(GetConnectionString());
+            connection.Open();
+
+            using var tx = connection.BeginTransaction();
+
+            int currentStock;
+
+            using (var selectCmd = new SQLiteCommand(
+                "SELECT Stock FROM Products WHERE Id = @id",
+                connection, tx))
+            {
+                selectCmd.Parameters.AddWithValue("@id", id);
+
+                using var reader = selectCmd.ExecuteReader();
+
+                if (!reader.Read())
+                    return null;
+
+                currentStock = reader.GetInt32(reader.GetOrdinal("Stock"));
+            }
+
+            int newStock = currentStock - removedStock;
+
+            using (var updateCmd = new SQLiteCommand(
+                "UPDATE Products SET Stock = @stock, UpdatedAt = @updatedAt WHERE Id = @id",
+                connection, tx))
+            {
+                updateCmd.Parameters.AddWithValue("@stock", newStock);
+                updateCmd.Parameters.AddWithValue("@updatedAt", DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+                updateCmd.Parameters.AddWithValue("@id", id);
+                updateCmd.ExecuteNonQuery();
+            }
+
+            tx.Commit();
+
+            return new Product
+            {
+                id = id,
+                stock = newStock
+            };
+        }
+
         public static object ReadProduct(int id)
         {
             object result;
@@ -314,6 +403,33 @@ namespace StockAPI
                 }
             }
             return GetProductById(newProduct.id);
+        }
+
+        public static Product UpdateProduct(int id, Product updatedProduct)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(GetConnectionString()))
+            {
+                connection.Open();
+                string query = @"
+                UPDATE Products
+                SET Name = @name,
+                    Price = @price,
+                    Category = @category,
+                    Stock = @stock,
+                    UpdatedAt = @updated_at
+                WHERE Id = @id";
+                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@name", updatedProduct.name);
+                    command.Parameters.AddWithValue("@price", updatedProduct.price);
+                    command.Parameters.AddWithValue("@category", updatedProduct.category);
+                    command.Parameters.AddWithValue("@stock", updatedProduct.stock);
+                    command.Parameters.AddWithValue("@updated_at", DateTime.Now.ToString("yyyy-MM-ddT HH:mm:ssZ"));
+                    command.Parameters.AddWithValue("@id", id);
+                    command.ExecuteNonQuery();
+                }
+            }
+            return GetProductById(id);
         }
 
         public static Product DeleteProductById(int id)
