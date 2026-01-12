@@ -1,6 +1,24 @@
-# @StockAPI_HostAddress = http://localhost:5028
+@StockAPI_HostAddress = https://localhost:3000/api/v1
 
-# GET {{StockAPI_HostAddress}}/weatherforecast/
-# Accept: application/json
+### Get all products
+GET {{StockAPI_HostAddress}}/products
+Accept: application/json
+
+### Get a product by their id
+GET {{StockAPI_HostAddress}}/products/18
+Accept: application/json
+
+### Example post request for a new product
+POST {{StockAPI_HostAddress}}/products
+Content-Type: application/json
+Accept: application/json
+{
+  "name": "New Product",
+  "price": 75,
+  "stock": 50,
+  "category": 4
+}
 
 ###
+DELETE {{StockAPI_HostAddress}}/products/27
+Accept: application/json

@@ -5,42 +5,22 @@ namespace StockAPI.Services;
 
 public static class ProductService
 {
-    static List<Product> Products { get; }
-    static int nextId = 3;
-    static ProductService()
+    public static List<Product> GetAllProducts() => DatabaseHelper.GetProductsDB();
+
+    public static object GetProduct(int id) => DatabaseHelper.ReadProduct(id);
+
+    public static Product Create(Product Product)
     {
-        Products = new List<Product>
-        {
-            new Product { id = 1, name = "Classic Italian", category = 1, stock = 50 },
-            new Product { id = 2, name = "Veggie", category = 4, stock = 50 }
-        };
+        return DatabaseHelper.CreateProduct(Product);
     }
 
-    public static List<Product> GetAll() => DatabaseHelper.GetProducts();
-
-    public static Product? Get(int id) => Products.FirstOrDefault(p => p.id == id);
-
-    public static void Add(Product Product)
+    public static Product Delete(int id)
     {
-        Product.id = nextId++;
-        Products.Add(Product);
-    }
-
-    public static void Delete(int id)
-    {
-        var Product = Get(id);
-        if (Product is null)
-            return;
-
-        Products.Remove(Product);
+        return DatabaseHelper.DeleteProductById(id);
     }
 
     public static void Update(Product Product)
     {
-        var index = Products.FindIndex(p => p.id == Product.id);
-        if (index == -1)
-            return;
 
-        Products[index] = Product;
     }
 }

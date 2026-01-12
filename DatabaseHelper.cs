@@ -11,7 +11,7 @@ namespace StockAPI
 
         public static string currentConnectionString = "";
 
-        public static List<Product> ?AllProducts;
+        public static List<Product>? AllProducts;
 
         public static string GetConnectionString()
         {
@@ -21,17 +21,17 @@ namespace StockAPI
         public static void InitializeDatabase()
         {
 
-                if (!File.Exists(filePath))
+            if (!File.Exists(filePath))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+
+                SQLiteConnection.CreateFile(filePath);
+                using (SQLiteConnection connection = new SQLiteConnection(GetConnectionString()))
                 {
-                    Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+                    connection.Open();
 
-                    SQLiteConnection.CreateFile(filePath);
-                    using (var connection = new SQLiteConnection(GetConnectionString()))
-                    {
-                        connection.Open();
-
-                        // Creates the database tables
-                        string createProductsQuery = @"
+                    // Creates the database tables
+                    string createProductsQuery = @"
                     CREATE TABLE IF NOT EXISTS Products (
                         Id INTEGER PRIMARY KEY AUTOINCREMENT,
                         Name TEXT NOT NULL,
@@ -42,7 +42,7 @@ namespace StockAPI
                         UpdatedAt TEXT NOT NULL
                     )";
 
-                        string createReceiptsQuery = @"
+                    string createReceiptsQuery = @"
                     CREATE TABLE IF NOT EXISTS Receipts (
                         ReceiptNumber INTEGER PRIMARY KEY AUTOINCREMENT,
                         ArticleCount INTEGER NOT NULL,
@@ -53,7 +53,7 @@ namespace StockAPI
                         Time TEXT NOT NULL
                     )";
 
-                        string createReceiptProductsQuery = @"
+                    string createReceiptProductsQuery = @"
                     CREATE TABLE IF NOT EXISTS ReceiptProducts(
                         Id INTEGER PRIMARY KEY AUTOINCREMENT,
                         ReceiptNumber INTEGER NOT NULL,
@@ -65,31 +65,31 @@ namespace StockAPI
                         FOREIGN KEY (ProductId) REFERENCES Products(Id)
                     )";
 
-                        string createCategoriesQuery = @"
+                    string createCategoriesQuery = @"
                     CREATE TABLE IF NOT EXISTS ProductCategories(
                         Id INTEGER PRIMARY KEY AUTOINCREMENT,
                         CategoryName TEXT NOT NULL
                     )";
 
-                        using (var command = new SQLiteCommand(connection))
-                        {
-                            command.CommandText = createProductsQuery;
-                            command.ExecuteNonQuery();
+                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    {
+                        command.CommandText = createProductsQuery;
+                        command.ExecuteNonQuery();
 
-                            command.CommandText = createReceiptsQuery;
-                            command.ExecuteNonQuery();
+                        command.CommandText = createReceiptsQuery;
+                        command.ExecuteNonQuery();
 
-                            command.CommandText = createReceiptProductsQuery;
-                            command.ExecuteNonQuery();
+                        command.CommandText = createReceiptProductsQuery;
+                        command.ExecuteNonQuery();
 
-                            command.CommandText = createCategoriesQuery;
-                            command.ExecuteNonQuery();
-                        }
+                        command.CommandText = createCategoriesQuery;
+                        command.ExecuteNonQuery();
                     }
-                    AddCategories(GetConnectionString());
-                    AddProducts(GetConnectionString());
                 }
+                AddCategories(GetConnectionString());
+                AddProducts(GetConnectionString());
             }
+        }
 
 
         public static void AddCategories(string connectionString)
@@ -105,7 +105,7 @@ namespace StockAPI
             {
                 connection.Open();
                 using (var tx = connection.BeginTransaction())
-                using (var cmd = new SQLiteCommand(@"INSERT INTO ProductCategories (CategoryName) 
+                using (SQLiteCommand cmd = new SQLiteCommand(@"INSERT INTO ProductCategories (CategoryName) 
                                            VALUES (@category)", connection, tx))
                 {
                     cmd.Parameters.Add(new SQLiteParameter("@category"));
@@ -125,39 +125,39 @@ namespace StockAPI
         {
             var products = new[]
             {
-                new { Name = "Bryggkaffe (liten)", Price = 28, Category = 1, Stock = 0 },
-                new { Name = "Bryggkaffe (stor)", Price = 34, Category = 1, Stock = 0 },
-                new { Name = "Cappuccino", Price = 42, Category = 1, Stock = 0 },
-                new { Name = "Latte", Price = 46, Category = 1, Stock = 0 },
-                new { Name = "Varm choklad med grädde", Price = 45, Category = 1, Stock = 0 },
-                new { Name = "Te (svart, grönt eller örtte)", Price = 32, Category = 1, Stock = 0 },
+                new { Name = "Bryggkaffe (liten)", Price = 28, Category = 1, Stock = 100 },
+                new { Name = "Bryggkaffe (stor)", Price = 34, Category = 1, Stock = 100 },
+                new { Name = "Cappuccino", Price = 42, Category = 1, Stock = 100 },
+                new { Name = "Latte", Price = 46, Category = 1, Stock = 100 },
+                new { Name = "Varm choklad med grädde", Price = 45, Category = 1, Stock = 100 },
+                new { Name = "Te (svart, grönt eller örtte)", Price = 32, Category = 1, Stock = 100 },
 
-                new { Name = "Islatte", Price = 48, Category = 2, Stock = 0 },
-                new { Name = "Ischai", Price = 46, Category = 2, Stock = 0 },
-                new { Name = "Läsk (33 cl)", Price = 22, Category = 2, Stock = 0 },
-                new { Name = "Mineralvatten", Price = 20, Category = 2, Stock = 0 },
-                new { Name = "Smoothie (jordgubb & banan)", Price = 55, Category = 2, Stock = 0 },
-                new { Name = "Färskpressad apelsinjuice", Price = 49, Category = 2, Stock = 0 },
+                new { Name = "Islatte", Price = 48, Category = 2, Stock = 100 },
+                new { Name = "Ischai", Price = 46, Category = 2, Stock = 100 },
+                new { Name = "Läsk (33 cl)", Price = 22, Category = 2, Stock = 100 },
+                new { Name = "Mineralvatten", Price = 20, Category = 2, Stock = 100 },
+                new { Name = "Smoothie (jordgubb & banan)", Price = 55, Category = 2, Stock = 100 },
+                new { Name = "Färskpressad apelsinjuice", Price = 49, Category = 2, Stock = 100 },
 
-                new { Name = "Kanelbulle", Price = 25, Category = 3, Stock = 0 },
-                new { Name = "Chokladboll", Price = 18, Category = 3, Stock = 0 },
-                new { Name = "Morotskaka (bit)", Price = 38, Category = 3, Stock = 0 },
-                new { Name = "Cheesecake (bit)", Price = 42, Category = 3, Stock = 0 },
-                new { Name = "Croissant", Price = 26, Category = 3, Stock = 0 },
-                new { Name = "Muffins (blåbär)", Price = 28, Category = 3, Stock = 0 },
+                new { Name = "Kanelbulle", Price = 25, Category = 3, Stock = 100 },
+                new { Name = "Chokladboll", Price = 18, Category = 3, Stock = 100 },
+                new { Name = "Morotskaka (bit)", Price = 38, Category = 3, Stock = 100 },
+                new { Name = "Cheesecake (bit)", Price = 42, Category = 3, Stock = 100 },
+                new { Name = "Croissant", Price = 26, Category = 3, Stock = 100 },
+                new { Name = "Muffins (blåbär)", Price = 28, Category = 3, Stock = 100 },
 
-                new { Name = "Smörgås (ost & skinka)", Price = 38, Category = 4, Stock = 0 },
-                new { Name = "Räksmörgås", Price = 69, Category = 4, Stock = 0 },
-                new { Name = "Panini (kyckling & pesto)", Price = 58, Category = 4, Stock = 0 },
-                new { Name = "Soppa med bröd", Price = 65, Category = 4, Stock = 0 },
-                new { Name = "Quinoasallad", Price = 72, Category = 4, Stock = 0 },
+                new { Name = "Smörgås (ost & skinka)", Price = 38, Category = 4, Stock = 100 },
+                new { Name = "Räksmörgås", Price = 69, Category = 4, Stock = 100 },
+                new { Name = "Panini (kyckling & pesto)", Price = 58, Category = 4, Stock = 100 },
+                new { Name = "Soppa med bröd", Price = 65, Category = 4, Stock = 100 },
+                new { Name = "Quinoasallad", Price = 72, Category = 4, Stock = 100 },
             };
 
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
                 using (var tx = connection.BeginTransaction())
-                using (var cmd = new SQLiteCommand(@"INSERT INTO Products (Name, Price, Category, Stock, CreatedAt, UpdatedAt) 
+                using (SQLiteCommand cmd = new SQLiteCommand(@"INSERT INTO Products (Name, Price, Category, Stock, CreatedAt, UpdatedAt) 
                                            VALUES (@name, @price, @category, @stock, @created_at, @updated_at)", connection, tx))
                 {
                     cmd.Parameters.Add(new SQLiteParameter("@name"));
@@ -192,7 +192,7 @@ namespace StockAPI
                 {
                     cmd.Parameters.AddWithValue("@productName", productName);
 
-                    // ExecuteScalar returns the first column of the first row
+                    // ExecuteScalar returns the first column of the first row where the query matches
                     object result = cmd.ExecuteScalar();
 
                     if (result != null && int.TryParse(result.ToString(), out int productId))
@@ -206,10 +206,10 @@ namespace StockAPI
                 }
             }
         }
-        public static List<Product> GetProducts()
+        public static List<Product> GetProductsDB()
         {
             AllProducts = new List<Product>();
-            using (var connection = new SQLiteConnection(GetConnectionString()))
+            using (SQLiteConnection connection = new SQLiteConnection(GetConnectionString()))
             {
                 connection.Open();
                 string query = "SELECT * FROM Products";
@@ -233,6 +233,106 @@ namespace StockAPI
                 }
             }
             return AllProducts;
+        }
+        public static Product GetProductById(int id)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(GetConnectionString()))
+            {
+                connection.Open();
+
+                string query = "SELECT * FROM Products WHERE Id = @id";
+
+                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@id", id);
+
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        if (!reader.Read())
+                            return null; 
+
+                        return new Product()
+                        {
+                            id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            name = reader.GetString(reader.GetOrdinal("Name")),
+                            price = reader.GetInt32(reader.GetOrdinal("Price")),
+                            category = reader.GetInt32(reader.GetOrdinal("Category")),
+                            stock = reader.GetInt32(reader.GetOrdinal("Stock")),
+                            created_at = reader.GetString(reader.GetOrdinal("CreatedAt")),
+                            updated_at = reader.GetString(reader.GetOrdinal("UpdatedAt"))
+                        };
+                    }
+                }
+            }
+        }
+
+        public static object ReadProduct(int id)
+        {
+            object result;
+
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                using (var cmd = new SQLiteCommand($"SELECT * FROM products WHERE id = {id}", connection))
+                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                {
+                    reader.Read();
+
+                    result = new
+                    {
+                        id = id,
+                        name = reader.GetString(reader.GetOrdinal("Name")),
+                        category = reader.GetInt32(reader.GetOrdinal("Category")),
+                        price = reader.GetFloat(reader.GetOrdinal("Price")),
+                        stock = reader.GetInt32(reader.GetOrdinal("Stock"))
+                    };
+                }
+            }
+            return result;
+        }
+
+        public static Product CreateProduct(Product newProduct)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(GetConnectionString()))
+            {
+                connection.Open();
+                string query = @"
+                INSERT INTO Products (Name, Price, Category, Stock, CreatedAt, UpdatedAt)
+                VALUES (@name, @price, @category, @stock, @created_at, @updated_at);
+                SELECT last_insert_rowid();";
+                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@name", newProduct.name);
+                    command.Parameters.AddWithValue("@price", newProduct.price);
+                    command.Parameters.AddWithValue("@category", newProduct.category);
+                    command.Parameters.AddWithValue("@stock", newProduct.stock);
+                    command.Parameters.AddWithValue("@created_at", DateTime.Now.ToString("yyyy-MM-ddT HH:mm:ssZ"));
+                    command.Parameters.AddWithValue("@updated_at", DateTime.Now.ToString("yyyy-MM-ddT HH:mm:ssZ"));
+                    long newId = (long)command.ExecuteScalar();
+                    newProduct.id = (int)newId;
+                }
+            }
+            return GetProductById(newProduct.id);
+        }
+
+        public static Product DeleteProductById(int id)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(GetConnectionString()))
+            {
+                connection.Open();
+
+                string query = "DELETE FROM Products WHERE Id = @id";
+
+                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@id", id);
+
+                    command.ExecuteNonQuery();
+
+                }
+            }
+            return GetProductById(id);
         }
     }
 }
