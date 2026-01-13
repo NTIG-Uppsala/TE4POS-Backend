@@ -13,6 +13,10 @@ if (app.Environment.IsDevelopment())
 
 }
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.MapStaticAssets().ShortCircuit();
+
 app.UseHttpsRedirection();
 
 //app.UseAuthorization();
