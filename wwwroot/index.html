@@ -1,13 +1,43 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1>Admin Panel</h1>
 
-    <script>
+    <table>
+        <thead>
+        <tr>
+            <th>Produkt</th>
+            <th>Kostnad</th>
+            <th>kategori</th>
+            <th>Stock</th>
+            <th>Redigera</th>
+            <th>Ta bort</th>
+        </tr>
+        </thead>
+        <tbody id="table-body">
 
-    </script>
+        </tbody>
+    </table>
+        <h2>Lägg till produkt</h2>
+        <form action="" method="POST">
+            <input type="text" name="Name" placeholder="Produkt namn" required>
+            <input type="number" name="Price" placeholder="Kostnad">
+            <select name="Category">
+                <option value="1">Varma drycker</option>
+                <option value="2">Kalla drycker</option>
+                <option value="3">Bakverk</option>
+                <option value="4">Enkel mat</option>
+            </select>
+            <input type="number" name="Stock" placeholder="Stock" required>
+            <button type="submit">Lägg till</button>
+        </form>
+    </div>
+    <script src="admin_panel.js"></script>
 </body>
 </html>

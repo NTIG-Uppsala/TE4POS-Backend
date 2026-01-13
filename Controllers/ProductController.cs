@@ -5,8 +5,8 @@ using StockAPI.Services;
 
 namespace StockAPI.Controllers
 {
+    [Route("/api/v1/products")]
     [ApiController]
-    [Route("api/v1/products")]
     public class ProductController : ControllerBase // Inherit from ControllerBase to use HTTP status codes
     {
 
