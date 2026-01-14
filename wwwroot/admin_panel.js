@@ -92,7 +92,6 @@ async function saveProduct() {
 
         cancelEdit();
 
-        alert("Produkt uppdaterad!");
     } catch (err) {
         console.error(err);
     }
