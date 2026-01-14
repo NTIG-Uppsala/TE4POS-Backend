@@ -303,11 +303,7 @@ namespace StockAPI
 
             tx.Commit();
 
-            return new Product
-            {
-                id = id,
-                stock = newStock
-            };
+            return GetProductById(id);
         }
 
 
@@ -348,11 +344,7 @@ namespace StockAPI
 
             tx.Commit();
 
-            return new Product
-            {
-                id = id,
-                stock = newStock
-            };
+            return GetProductById(id);
         }
 
         public static object ReadProduct(int id)
