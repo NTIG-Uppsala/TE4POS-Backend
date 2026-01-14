@@ -11,32 +11,50 @@
 
     <table>
         <thead>
-        <tr>
-            <th>Produkt</th>
-            <th>Kostnad</th>
-            <th>kategori</th>
-            <th>Stock</th>
-            <th>Redigera</th>
-            <th>Ta bort</th>
-        </tr>
+            <tr>
+                <th>Produkt</th>
+                <th>Kostnad</th>
+                <th>kategori</th>
+                <th>Stock</th>
+                <th>Redigera</th>
+                <th>Ta bort</th>
+            </tr>
         </thead>
         <tbody id="table-body">
-
         </tbody>
     </table>
-        <h2>Lägg till produkt</h2>
-        <form action="" method="POST">
-            <input type="text" name="Name" placeholder="Produkt namn" required>
-            <input type="number" name="Price" placeholder="Kostnad">
-            <select name="Category">
-                <option value="1">Varma drycker</option>
-                <option value="2">Kalla drycker</option>
-                <option value="3">Bakverk</option>
-                <option value="4">Enkel mat</option>
-            </select>
-            <input type="number" name="Stock" placeholder="Stock" required>
-            <button type="submit">Lägg till</button>
-        </form>
+
+    <h2>Lägg till produkt</h2>
+    <form id="addProductForm">
+        <input type="text" name="name" placeholder="Produkt namn" required>
+        <input type="number" name="price" placeholder="Kostnad" required>
+        <select name="category">
+            <option value="1">Varma drycker</option>
+            <option value="2">Kalla drycker</option>
+            <option value="3">Bakverk</option>
+            <option value="4">Enkel mat</option>
+        </select>
+        <input type="number" name="stock" placeholder="i lager" required>
+        <button type="submit" onclick="addProduct()">Lägg till</button>
+    </form>
+
+    <form id="editForm" style="display:none;">
+        <input type="hidden" id="productId">
+
+        <input type="text" id="name" placeholder="Produkt namn" required>
+        <input type="number" id="price" placeholder="Kostnad" required>
+        <select id="category">
+            <option value="1">Varma drycker</option>
+            <option value="2">Kalla drycker</option>
+            <option value="3">Bakverk</option>
+            <option value="4">Enkel mat</option>
+        </select>
+        <input type="number" id="stock" placeholder="i lager" required>
+
+        <button type="submit" onclick="saveProduct()">Spara</button>
+        <button type="button" onclick="cancelEdit()">Avbryt</button>
+    </form>
+
     <script src="admin_panel.js"></script>
 </body>
 </html>
