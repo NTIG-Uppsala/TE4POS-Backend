@@ -6,6 +6,8 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
+builder.WebHost.UseUrls("http://0.0.0.0:3000");
+
 DatabaseHelper.InitializeDatabase();
 
 if (app.Environment.IsDevelopment())

@@ -3,12 +3,12 @@ Description=ASP.NET Core API
 After=network.target
 
 [Service]
-WorkingDirectory=/var/www/api/publish
-ExecStart=/usr/bin/dotnet /var/www/api/publish/TE4POS.dll
+WorkingDirectory=/TE4POS-Backend/publish
+ExecStart=/usr/bin/dotnet /TE4POS-Backend/publish/TE4POS.dll
+SyslogIdentifier=StockAPI
 
 Restart=always
-RestartSec=10
-User=www-data
+RestartSec=5
 
 Environment=ASPNETCORE_ENVIRONMENT=Production
 Environment=ASPNETCORE_URLS=http://0.0.0.0:3000
