@@ -357,28 +357,34 @@ namespace StockAPI
 
         public static object ReadProduct(int id)
         {
-            object result;
-
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            try
             {
-                connection.Open();
+                object result;
 
-                using (var cmd = new SQLiteCommand($"SELECT * FROM products WHERE id = {id}", connection))
-                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
                 {
-                    reader.Read();
+                    connection.Open();
 
-                    result = new
+                    using (var cmd = new SQLiteCommand($"SELECT * FROM products WHERE id = {id}", connection))
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
                     {
-                        id = id,
-                        name = reader.GetString(reader.GetOrdinal("Name")),
-                        category = reader.GetInt32(reader.GetOrdinal("Category")),
-                        price = reader.GetFloat(reader.GetOrdinal("Price")),
-                        stock = reader.GetInt32(reader.GetOrdinal("Stock"))
-                    };
+                        reader.Read();
+
+                        result = new
+                        {
+                            id = id,
+                            name = reader.GetString(reader.GetOrdinal("Name")),
+                            category = reader.GetInt32(reader.GetOrdinal("Category")),
+                            price = reader.GetFloat(reader.GetOrdinal("Price")),
+                            stock = reader.GetInt32(reader.GetOrdinal("Stock"))
+                        };
+                    }
                 }
+                return result;
+            } catch (Exception ex)
+            {
+                return null;
             }
-            return result;
         }
 
         public static Product CreateProduct(Product newProduct)
