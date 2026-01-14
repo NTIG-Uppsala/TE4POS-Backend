@@ -296,7 +296,7 @@ namespace StockAPI
                 connection, tx))
             {
                 updateCmd.Parameters.AddWithValue("@stock", newStock);
-                updateCmd.Parameters.AddWithValue("@updatedAt", DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+                updateCmd.Parameters.AddWithValue("@updatedAt", DateTime.UtcNow.ToString("yyyy-MM-ddT HH:mm:ssZ"));
                 updateCmd.Parameters.AddWithValue("@id", id);
                 updateCmd.ExecuteNonQuery();
             }
@@ -337,7 +337,7 @@ namespace StockAPI
                 connection, tx))
             {
                 updateCmd.Parameters.AddWithValue("@stock", newStock);
-                updateCmd.Parameters.AddWithValue("@updatedAt", DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+                updateCmd.Parameters.AddWithValue("@updatedAt", DateTime.UtcNow.ToString("yyyy-MM-ddT HH:mm:ssZ"));
                 updateCmd.Parameters.AddWithValue("@id", id);
                 updateCmd.ExecuteNonQuery();
             }
