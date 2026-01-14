@@ -33,7 +33,10 @@ namespace StockAPI.Controllers
         [HttpPost]
         public ActionResult<Product> CreateProduct([FromBody] Product product)
         {
-            return ProductService.Create(product);
+            var createdproduct = ProductService.Create(product);
+
+            return StatusCode(StatusCodes.Status201Created, createdproduct);
+
 
         }
         [HttpPut("{id}")]
