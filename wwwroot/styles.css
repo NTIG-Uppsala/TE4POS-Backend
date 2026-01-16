@@ -22,5 +22,41 @@ table {
 
 td, th {
     padding: 8px;
-    border: 1px solid #ccc
+    border: 1px solid #ccc;
+}
+
+.category-1{
+    background-color:orange;
+}
+
+.category-2{
+    background-color:cyan;
+}
+.category-3{
+    background-color:chartreuse;
+}
+.category-4 {
+    background-color:lavender;
+}
+
+.priceBar{
+    width:75px;
+}
+
+.addProductIntoTable{
+    background-color:yellow;
+    border-radius:8px;
+    border:1px solid;
+}
+
+.edit-btn, .saveButton {
+    background-color: lightgreen;
+    border-radius: 8px;
+    border: 1px solid;
+}
+
+.delete-btn, .cancelButton{
+    background-color:red;
+    border-radius:8px;
+    border:1px solid;
 }
