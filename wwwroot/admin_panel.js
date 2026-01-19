@@ -6,14 +6,21 @@ async function getData() {
     const products = await res.json();
     const table = document.getElementById("table-body");
 
+    const CATEGORY_VALUES = {
+        1: "Varma drycker",
+        2: "Kalla drycker",
+        3: "Bakverk",
+        4: "Enkel mat"
+    };
+
     products.forEach(product => {
       table.innerHTML += `
         <tr data-id="${product.id}">
-          <td class="name">${product.name}</td>
+          <td class="name category-${product.category}">${product.name}</td>
           <td class="price">${product.price}</td>
-          <td class="category">${product.category}</td>
+          <td class="category">${CATEGORY_VALUES[product.category]}</td>
           <td class="stock">${product.stock}</td>
-          <td><button onclick="editProduct(this)">Redigera</button></td>
+          <td><button class="edit-btn" onclick="editProduct(this)">Redigera</button></td>
           <td><button class="delete-btn" data-id="${product.id}">Ta bort</button></td>
         </tr>
       `;
@@ -75,6 +82,10 @@ async function saveProduct() {
     const price = document.getElementById("price").value;
     const category = document.getElementById("category").value;
     const stock = document.getElementById("stock").value;
+
+    const nameBackgroundColorCell = currentRow.querySelector(".name");
+
+    nameBackgroundColorCell.classList.add(`category-${category}`);
 
     try {
         const res = await fetch(`/api/v1/products/${id}`, {
