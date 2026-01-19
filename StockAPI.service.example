@@ -3,8 +3,8 @@ Description=ASP.NET Core API
 After=network.target
 
 [Service]
-WorkingDirectory=/srv/stockapi
-ExecStart=/usr/bin/dotnet /srv/stockapi/TE4POS.dll
+WorkingDirectory=/srv/StockAPI
+ExecStart=/usr/bin/dotnet /srv/StockAPI/StockAPI.dll
 SyslogIdentifier=StockAPI
 
 # Restart 
